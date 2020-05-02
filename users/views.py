@@ -51,6 +51,7 @@ class UserDetailView(APIView):
             resources = paginator.page(page)
             serializer = UserSerializer(resources, many=True)
 
+
         else:
             for obj in User.objects.all():
                 writer.writerow([getattr(obj, field) for field in field_names])

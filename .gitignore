@@ -1,0 +1,21 @@
+.DS_store
+staticroot/
+media/
+venv/
+venv2/
+venv3/
+venv36/
+start.sh
+etc/
+db.sqlite3
+
+# Pycharm and IDEA
+*/.idea
+/.idea
+# Python
+*.pyc
+
+zooper/settings/_*.py
+!zooper/settings/__init__.py
+
+*.pid
