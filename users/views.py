@@ -2,7 +2,7 @@ import csv
 
 from django.contrib.auth import authenticate
 from django.http import HttpResponse
-from django.core.paginator import Paginator
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -45,12 +45,26 @@ class UserDetailView(APIView):
 
         writer = csv.writer(response)
         writer.writerow(field_names)
-        if page:
-            size = 2
-            paginator = Paginator(users, size)
-            resources = paginator.page(page)
-            serializer = UserSerializer(resources, many=True)
 
+        if page:
+            paginator = Paginator(users, 10)
+            try:
+                cart_details = paginator.page(page)
+            except PageNotAnInteger:
+                cart_details = paginator.page(1)
+            except EmptyPage:
+                cart_details = paginator.page(paginator.num_pages)
+            serializer = UserSerializer(cart_details, many=True).data
+            headers = []
+            for key in serializer[0]:
+                headers.append(key)
+            for row in serializer:
+                targetrow = []
+                for key in headers:
+                    targetrow.append(row[key])
+                writer.writerow(targetrow)
+
+            return response
 
         else:
             for obj in User.objects.all():
