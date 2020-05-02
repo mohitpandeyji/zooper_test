@@ -49,12 +49,12 @@ class UserDetailView(APIView):
         if page:
             paginator = Paginator(users, 10)
             try:
-                cart_details = paginator.page(page)
+                user_details = paginator.page(page)
             except PageNotAnInteger:
-                cart_details = paginator.page(1)
+                user_details = paginator.page(1)
             except EmptyPage:
-                cart_details = paginator.page(paginator.num_pages)
-            serializer = UserSerializer(cart_details, many=True).data
+                user_details = paginator.page(paginator.num_pages)
+            serializer = UserSerializer(user_details, many=True).data
             headers = []
             for key in serializer[0]:
                 headers.append(key)
